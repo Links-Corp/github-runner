@@ -8,6 +8,7 @@ services:
       context: .
       args:
         RUNNER_VERSION: '2.304.0'
+    container_name: runner
     environment:
       REG_TOKEN: ${REG_TOKEN}
       GH_OWNER: ${GH_OWNER}
