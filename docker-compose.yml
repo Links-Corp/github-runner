@@ -1,0 +1,13 @@
+---
+version: '3.9'
+
+services:
+  runner:
+    image: registry.fenikz.eu/github-runner:latest
+    build:
+      context: .
+      args:
+        RUNNER_VERSION: '2.304.0'
+    environment:
+      REG_TOKEN: ${REG_TOKEN}
+      GH_OWNER: ${GH_OWNER}
