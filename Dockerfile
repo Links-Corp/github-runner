@@ -4,6 +4,7 @@ FROM ubuntu:20.04
 #input GitHub runner version argument
 ARG RUNNER_VERSION
 ENV DEBIAN_FRONTEND=noninteractive
+ENV USER=docker
 
 LABEL Author="Patrick K"
 LABEL Email="fenikz3@gmail.com1"
@@ -26,16 +27,21 @@ RUN cd /home/docker && mkdir actions-runner && cd actions-runner \
 # install some additional dependencies
 RUN chown -R docker ~docker && /home/docker/actions-runner/bin/installdependencies.sh
 
+# install docker
+RUN curl -fsSL https://get.docker.com -o get-docker.sh\
+    && sh get-docker.sh
+
 # add over the start.sh script
 ADD scripts/start.sh start.sh
 
 # make the script executable
 RUN chmod +x start.sh
 
-# set the user to "docker" so all subsequent commands are run as the docker user
-USER docker
+# Add user to docker group
+RUN usermod -aG docker ${USER}
 
-RUN echo ${REG_TOKEN}
+# set the user to "docker" so all subsequent commands are run as the docker user
+USER ${USER}
 
 # set the entrypoint to the start.sh script
 ENTRYPOINT ["./start.sh"]
